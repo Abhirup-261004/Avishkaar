@@ -8,7 +8,7 @@ const { isLoggedIn } = require("../middleware/auth");
 // 🌍 Home Page
 router.get("/", (req, res) => {
   res.render("home", {
-    title: "EcoTrack | Home",
+    title: "Home",
     pageCSS: ["home"], // ✅ will load /public/css/home.css
     currentUser: req.user
   });
@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
 // 🧾 Register form
 router.get("/register", (req, res) => {
   res.render("users/register", {
-    title : "Sign Up | Equil", 
+    title : "Sign Up ", 
     pageCSS : ["auth"], 
      currentUser: req.user,
    
@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
 // 🔐 Login form
 router.get("/login", (req, res) => {
   res.render("users/login", {
-    title: " Sign In | EcoTrack",
+    title: " Sign In ",
     pageCSS: ["auth"], // ✅ loads auth.css
    
     currentUser: req.user
