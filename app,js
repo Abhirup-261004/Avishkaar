@@ -1,0 +1,11 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const path = require("path");
+const User = require("./models/user");
+const userRoutes = require("./routes/user");
+
