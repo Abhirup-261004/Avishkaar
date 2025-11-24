@@ -26,29 +26,39 @@ router.get("/register", (req, res) => {
 });
 
 // 🧾 Register user
-router.post("/register", async (req, res) => {
+router.post("/register", (req, res) => {
   const { username, email, password } = req.body;
 
-  try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      req.flash("error", "Email already registered!");
-      return res.redirect("/register");
-    }
+  // 1. Check if email already exists
+  User.findOne({ email })
+    .then((existingUser) => {
+      if (existingUser) {
+        req.flash("error", "Email already registered!");
+        return res.redirect("/register");
+      }
 
-    const user = new User({ username, email });
+      // 2. Create user document (NO password here)
+      const user = new User({ username, email });
 
-    await User.register(user, password); // ✔ saves automatically
+      // 3. Use passport-local-mongoose register with CALLBACK
+      User.register(user, password, (err, registeredUser) => {
+        if (err) {
+          console.log("REGISTRATION ERROR:", err);
+          req.flash("error", "Registration failed. Try again.");
+          return res.redirect("/register");
+        }
 
-    req.flash("success", "Registration successful! Please log in.");
-    res.redirect("/login");
-
-  } catch (err) {
-    console.log("REGISTRATION ERROR:", err);
-    req.flash("error", "Registration failed. Try again.");
-    res.redirect("/register");
-  }
+        req.flash("success", "Registration successful. Please log in!");
+        res.redirect("/login");
+      });
+    })
+    .catch((err) => {
+      console.log("REGISTER FIND ERROR:", err);
+      req.flash("error", "Something went wrong. Please try again.");
+      res.redirect("/register");
+    });
 });
+
 
 // 🔐 Login form
 router.get("/login", (req, res) => {
