@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="community.css">
+</head>
+<body>
+    <div class="community-container">
+  <h1 class="community-title"> Community Wall</h1>
+
+<div class="community-content">
+  
+    <form action="/community" method="POST" class="post-form">
+      <textarea name="message" placeholder="Share your eco action..." required></textarea>
+      <button type="submit" class="btn-primary">Post</button>
+    </form>
+  
+  <div class="posts-list">
+    <% posts.forEach(post => { %>
+      <div class="post-card">
+        <div class="post-header">
+          <strong><%= post.username %></strong>
+          <span class="date"><%= post.createdAt.toDateString() %></span>
+        </div>
+        <p class="message"><%= post.message %></p>
+        <form action="/community/<%= post._id %>/like" method="POST" class="like-form">
+          <button class="like-btn">❤️ <%= post.likes %></button>
+        </form>
+      </div>
+    <% }) %>
+  </div>
+</div>
+</div>
+</body>
+</html>
