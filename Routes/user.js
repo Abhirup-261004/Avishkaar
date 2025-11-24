@@ -28,24 +28,25 @@ router.get("/register", (req, res) => {
 // 🧾 Register user
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
+
   try {
-    const exist = await User.findOne({ email });
-    if (exist) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       req.flash("error", "Email already registered!");
       return res.redirect("/register");
     }
 
-   const newUser = new User({ username, email });
-  await User.register(newUser, password);
-    await newUser.save();
+    const user = new User({ username, email });
 
-    req.flash("success", "Registration successful. Please log in!");
+    await User.register(user, password); // ✔ saves automatically
+
+    req.flash("success", "Registration successful! Please log in.");
     res.redirect("/login");
+
   } catch (err) {
-    console.log(err);
-    req.flash("error", "Registration failed");
+    console.log("REGISTRATION ERROR:", err);
+    req.flash("error", "Registration failed. Try again.");
     res.redirect("/register");
-    
   }
 });
 
