@@ -38,7 +38,7 @@ router.post("/register", (req, res) => {
       }
 
       // 2. Create user document (NO password here)
-      const user = new User({ email});
+      const user = new User({ email });
 
       // 3. Use passport-local-mongoose register with CALLBACK
       User.register(user, password, (err, registeredUser) => {
@@ -146,5 +146,20 @@ router.get('/About', (req, res) => {
   });
 });
 
+router.get('/faq', (req, res) => {
+  res.render('faq', {
+    title: 'Frequently Asked Questions | Equil',
+    pageCSS: ['faq'],
+    currentUser: req.user
+  });
+});
+
+router.get('/help', (req, res) => {
+  res.render('help', {
+    title: 'Help and Support',
+    pageCSS: ['help'],
+    currentUser: req.user
+  });
+});
 
 module.exports = router;

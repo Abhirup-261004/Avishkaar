@@ -1,0 +1,68 @@
+<% pageCSS = ["faq"]; %>
+
+<!-- 🌍 FAQ Page Body -->
+<div class="container">
+        <h1>Frequently Asked Questions</h1>
+
+        <div class="faq-buttons">
+            <a href="/help">Help & Support</a>
+            <a href="/community">Join Community</a>
+        </div>
+
+        <div class="faq" onclick="toggleFAQ(this)">
+            <div class="faq-title">
+                <p>What is this website about?</p>
+                <span>+</span>
+            </div>
+            <div class="faq-content">
+                This website provides tools, information, and services to help users easily access our features.
+            </div>
+        </div>
+
+        <div class="faq" onclick="toggleFAQ(this)">
+            <div class="faq-title">
+                <p>How do I contact support?</p>
+                <span>+</span>
+            </div>
+            <div class="faq-content">
+                You can reach us through the Help & Support button, which opens the Contact Us page.
+            </div>
+        </div>
+
+        <div class="faq" onclick="toggleFAQ(this)">
+            <div class="faq-title">
+                <p>Is this service free to use?</p>
+                <span>+</span>
+            </div>
+            <div class="faq-content">
+                Yes, our main features are completely free to use for everyone.
+            </div>
+        </div>
+
+        <div class="faq" onclick="toggleFAQ(this)">
+            <div class="faq-title">
+                <p>How can I stay updated?</p>
+                <span>+</span>
+            </div>
+            <div class="faq-content">
+                You can regularly check this website for updates. Community features are coming soon.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFAQ(element) {
+            const isOpen = element.classList.contains("open");
+
+            // Option 1: Close all others (accordion behavior)
+            document.querySelectorAll(".faq").forEach(faq => {
+                if (faq !== element) {
+                    faq.classList.remove("open");
+                }
+            });
+
+            // Toggle current
+            element.classList.toggle("open");
+
+        }
+    </script>

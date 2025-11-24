@@ -1,0 +1,36 @@
+<% pageCSS = ['Help.css']; %>
+<div class="container">
+        <div class="content-card" id="card">
+            <h2 class="mission-title">Contact Us</h2>
+            <p class="mission-text">
+                Have questions, feedback, or suggestions? We'd love to hear from you!
+            </p>
+
+            <h2 class="content-title">Get in Touch</h2>
+            <p class="content-text">Fill out the form below and our team will get back to you as soon as possible.</p>
+
+            <form class="contact-form" id="contactForm">
+                <input type="text" placeholder="Your Name" class="input-field" required />
+                <input type="email" placeholder="Your Email" class="input-field" required />
+                <textarea placeholder="Your Message" class="textarea-field" required></textarea>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+        <script>
+        function toggleFAQ(element) {
+            const isOpen = element.classList.contains("open");
+
+            // Option 1: Close all others (accordion behavior)
+            document.querySelectorAll(".faq").forEach(faq => {
+                if (faq !== element) {
+                    faq.classList.remove("open");
+                }
+            });
+
+            // Toggle current
+            element.classList.toggle("open");
+
+        }
+    </script>
