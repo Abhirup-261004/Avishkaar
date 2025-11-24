@@ -9,6 +9,9 @@ const path = require("path");
 const User = require("./models/user");
 const userRoutes=require("./routes/user")
 
+const chatRoutes=require("./routes/chat")
+const communityRoutes= require("./routes/community")
+
 const MongoStore=require("connect-mongo");
 const ejslayouts = require("express-ejs-layouts"); // FIXED
 
@@ -78,6 +81,8 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/", userRoutes);
+app.use("/",chatRoutes);
+app.use("/community",communityRoutes);
 
 
 const PORT = process.env.PORT || 3000;
