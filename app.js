@@ -7,7 +7,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const path = require("path");
 const User = require("./models/user");
-const userRoutes= require("./routes/user")
+const userRoutes=require("./routes/user")
 
 const MongoStore=require("connect-mongo");
 const ejslayouts = require("express-ejs-layouts"); // FIXED
@@ -34,9 +34,10 @@ app.use(
   })
 );
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log(" MongoDB Connected"))
-  .catch((err) => console.log(" MongoDB Error:", err));
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log("MongoDB Error:", err));
+
 // EJS Setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));

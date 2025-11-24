@@ -1,5 +1,3 @@
-/* 🌿 AUTH PAGE STYLING (Sign In / Sign Up) */
-
 /* Reset layout for auth pages */
 body.auth-page {
   margin: 0;
@@ -108,14 +106,14 @@ body.auth-page {
 }
 
 .forgot-password-link:hover {
-  color: #22c55e;
+  color: red;
 }
 
 /* Sign In Button */
 .sign-in-btn {
   width: 100%;
   padding: 14px 0;
-  background-color: #22c55e;
+  background-color: blue;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -126,7 +124,7 @@ body.auth-page {
 }
 
 .sign-in-btn:hover {
-  background-color: #16a34a;
+  background-color: darkblue;
 }
 
 /* Signup link */
@@ -138,7 +136,7 @@ body.auth-page {
 }
 
 .signup-link {
-  color: #22c55e;
+  color: blue;
   text-decoration: none;
   font-weight: 600;
 }
@@ -284,7 +282,7 @@ body {
 .create-account-btn {
     width: 100%;
     padding: 15px 0;
-    background-color: #38c172; /* Green color from the image */
+    background-color: blue; 
     color: #ffffff;
     border: none;
     border-radius: 12px;
@@ -296,7 +294,7 @@ body {
 }
 
 .create-account-btn:hover {
-    background-color: #32a862; /* Slightly darker green on hover */
+    background-color: darkblue; /* Slightly darker green on hover */
 }
 
 /* --- Footer Link Styling --- */
@@ -309,7 +307,7 @@ body {
 }
 
 .terms-text a, .signin-prompt a {
-    color: #38c172; /* Use the main green color for links */
+    color: blue; /* Use the main green color for links */
     text-decoration: none;
     font-weight: 600;
 }
@@ -328,7 +326,7 @@ body {
 
 /* Specific styling for the Privacy/Terms links to match the lighter color in the image */
 .privacy-link, .terms-link {
-    color: #38c172; /* Lighter shade of green for specific links */
+    color: blue; /* Lighter shade of green for specific links */
 }
 
 /* Optional: Center the entire container if the screen is much wider than max-width */

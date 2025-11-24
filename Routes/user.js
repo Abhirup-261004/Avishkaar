@@ -93,7 +93,7 @@ router.get("/profile", isLoggedIn, async (req, res) => {
     };
 
     res.render("users/profile", {
-      title: "My Profile | Equil",
+      title: "My Profile ",
       user,                    // ✅ this is the key part
       totals,
       activities,
