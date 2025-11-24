@@ -38,13 +38,14 @@ router.post("/register", (req, res) => {
       }
 
       // 2. Create user document (NO password here)
-      const user = new User({ username, email });
+      const user = new User({ email, username });
 
       // 3. Use passport-local-mongoose register with CALLBACK
       User.register(user, password, (err, registeredUser) => {
         if (err) {
           console.log("REGISTRATION ERROR:", err);
-          req.flash("error", "Registration failed. Try again.");
+          // req.flash("error", "Registration failed. Try again.");
+          req.flash("error", err.message);
           return res.redirect("/register");
         }
 
