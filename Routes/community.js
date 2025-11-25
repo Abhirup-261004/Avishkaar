@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   res.render("community/index", {
     title: "Community Wall | Equil",
     pageCSS: ["community"],
-    currentUser: req.user,
+    currentUser: req.session.user,
     posts
   });
 });
@@ -23,8 +23,8 @@ router.post("/", isLoggedIn, async (req, res) => {
   }
 
   await Post.create({
-    user: req.user._id,
-    username: req.user.username,
+    user: req.session.user._id,
+    username: req.session.user.username,
     message
   });
 
