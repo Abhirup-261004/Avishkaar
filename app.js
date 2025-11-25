@@ -11,6 +11,7 @@ const userRoutes=require("./routes/user")
 
 const chatRoutes=require("./routes/chat")
 const communityRoutes= require("./routes/community")
+const prescriptionRouter = require('./routes/prescription');
 
 const MongoStore=require("connect-mongo");
 const ejslayouts = require("express-ejs-layouts"); // FIXED
@@ -83,6 +84,8 @@ app.use((req, res, next) => {
 app.use("/", userRoutes);
 app.use("/",chatRoutes);
 app.use("/community",communityRoutes);
+app.use("/api/prescription",prescriptionRouter);
+
 
 
 const PORT = process.env.PORT || 3000;

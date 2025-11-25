@@ -1,0 +1,89 @@
+<% pageCSS = ["prescription"]; %>
+
+<div class="container">
+    <header>
+        <h1>💊 Prescription Parser</h1>
+        <p>Upload up to 3 prescriptions (morning, afternoon, night) to get a health summary.</p>
+    </header>
+
+    <!-- Upload Section -->
+    <div class="upload-section">
+        <div class="upload-grid">
+            <!-- Morning -->
+            <div class="upload-card">
+                <h3>🌅 Morning Prescription</h3>
+                <button class="btn" onclick="document.getElementById('morningInput').click()">
+                    📁 Upload Morning
+                </button>
+                <input 
+                    type="file" 
+                    id="morningInput" 
+                    accept="image/*" 
+                    style="display:none" 
+                    onchange="handleFileSelect(event, 'morning')"
+                >
+                <div id="morningPreviewSection" class="hidden preview-block">
+                    <h4>Preview</h4>
+                    <img id="morningPreview" />
+                </div>
+            </div>
+
+            <!-- Afternoon -->
+            <div class="upload-card">
+                <h3>☀️ Afternoon Prescription</h3>
+                <button class="btn" onclick="document.getElementById('afternoonInput').click()">
+                    📁 Upload Afternoon
+                </button>
+                <input 
+                    type="file" 
+                    id="afternoonInput" 
+                    accept="image/*" 
+                    style="display:none" 
+                    onchange="handleFileSelect(event, 'afternoon')"
+                >
+                <div id="afternoonPreviewSection" class="hidden preview-block">
+                    <h4>Preview</h4>
+                    <img id="afternoonPreview" />
+                </div>
+            </div>
+
+            <!-- Night -->
+            <div class="upload-card">
+                <h3>🌙 Night Prescription</h3>
+                <button class="btn" onclick="document.getElementById('nightInput').click()">
+                    📁 Upload Night
+                </button>
+                <input 
+                    type="file" 
+                    id="nightInput" 
+                    accept="image/*" 
+                    style="display:none" 
+                    onchange="handleFileSelect(event, 'night')"
+                >
+                <div id="nightPreviewSection" class="hidden preview-block">
+                    <h4>Preview</h4>
+                    <img id="nightPreview" />
+                </div>
+            </div>
+        </div>
+
+        <button class="btn parse-btn" onclick="processPrescription()">
+            🔍 Process Prescriptions
+        </button>
+    </div>
+
+    <!-- Loading -->
+    <div id="loadingSection" class="hidden loading-section">
+        <div class="loader"></div>
+        <p>Processing your prescriptions...</p>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsSection" class="hidden results-section">
+        <h3>Extracted Information</h3>
+        <div id="results"></div>
+        <button class="btn" onclick="resetApp()">Parse Another Set</button>
+    </div>
+</div>
+
+<script src="/js/prescription.js"></script>
