@@ -1,27 +1,26 @@
-
-
 :root {
-    --color-bg: #f5f5f5;
-    --color-card-bg: #ffffff;
-    --color-primary: #444;
-    --color-secondary: #6f6f6f;
-    --color-border: #dcdcdc;
-    --color-hover: #e8e8e8;
+    --primary: #007bff;
+    --dark-blue: #003366;
+    --text-dark: #003366;
+    --text-light: #6b7280;
+    --card-bg: #ffffff;
+    --card-hover: #f0f6ff;
+    --border: #dce7ff;
 }
-
-
-.container {
-    max-width: 850px;
-    margin: auto;
-}
-
+/* ------------------------------
+   PAGE HEADING
+-------------------------------- */
 h1 {
     text-align: center;
-    font-size: 2.3rem;
-    margin-bottom: 35px;
-    font-weight: 700;
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--dark-blue);
+    margin-bottom: 30px;
 }
 
+/* ------------------------------
+   BUTTONS (Match homepage button style)
+-------------------------------- */
 .faq-buttons {
     display: flex;
     justify-content: center;
@@ -31,69 +30,96 @@ h1 {
 
 .faq-buttons a,
 .faq-buttons button {
-    padding: 12px 25px;
-    background: #3b3b3b;
-    color: #fff;
-    border-radius: 10px;
-    border: none;
+    padding: 12px 28px;
+    border-radius: 12px;
+    border: 2px solid var(--primary);
+    background: white;
+    color: var(--primary);
+    font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
     text-decoration: none;
-    transition: 0.2s;
+    transition: 0.3s ease;
 }
 
 .faq-buttons a:hover,
 .faq-buttons button:hover {
-    background: #2b2b2b;
+    background: var(--primary);
+    color: white;
 }
 
+/* ------------------------------
+   FAQ CARD CONTAINER
+-------------------------------- */
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+/* FAQ CARD (Match homepage feature-card) */
 .faq {
-    background: var(--color-card-bg);
-    border-radius: 14px;
-    padding: 18px 22px;
-    margin-bottom: 15px;
-    border: 1px solid var(--color-border);
+    background: var(--card-bg);
+    border-radius: 20px;
+    border-top: 4px solid var(--primary);
+    padding: 20px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.10);
     cursor: pointer;
-    transition: background 0.2s;
-    overflow: hidden;
+    transition: 0.25s ease;
 }
 
 .faq:hover {
-    background: var(--color-hover);
+    background: var(--card-hover);
+    transform: translateY(-3px);
 }
 
+/* FAQ Title */
 .faq-title {
-    font-size: 1.1rem;
-    display:  flex;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: 600;
 }
 
 .faq-title span {
-    font-size: 1.5rem;
+    font-size: 28px;
     font-weight: bold;
+    color: var(--primary);
     transition: transform 0.3s ease;
 }
 
+/* Rotate + on open */
 .faq.open .faq-title span {
-    transform: rotate(45deg); /* + becomes × when open */
+    transform: rotate(45deg);
 }
 
+/* FAQ CONTENT */
 .faq-content {
     max-height: 0;
     overflow: hidden;
-    color: var(--color-secondary);
+    color: var(--text-light);
+    font-size: 16px;
     line-height: 1.6;
-    font-size: 0.95rem;
     opacity: 0;
     padding-top: 0;
-    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.3s ease;
+    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
 .faq.open .faq-content {
-    max-height: 200px;     /* Enough for most answers */
+    max-height: 250px;
     opacity: 1;
     padding-top: 14px;
-    padding-bottom: 8px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 32px;
+    }
+
+    .faq {
+        padding: 18px;
+    }
 }
