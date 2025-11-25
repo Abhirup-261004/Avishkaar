@@ -99,7 +99,7 @@ Follow these steps to run the backend server locally:
 
 ### 1️⃣ Clone the Repository
 
-```sh
+sh
 git clone https://github.com/yourusername/AVISHKAAR.git
 cd AVISHKAAR
 
