@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Reports Viewer</title>
+    <style>
+        body { font-family: Arial; background: #eef2f7; padding: 20px; }
+        h1 { color: #0d47a1; }
+        ul { list-style: none; padding: 0; }
+        li { background: white; margin: 10px 0; padding: 12px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        .error { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Patient Reports</h1>
+    <div id="content"></div>
+
+    <script>
+        async function loadReports() {
+            const params = new URLSearchParams(window.location.search);
+            const token = params.get('token');
+
+            if(!token) {
+                document.getElementById('content').innerHTML = '<p class="error">QR token missing!</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:4000/scan-qr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+
+                const data = await response.json();
+                const contentDiv = document.getElementById('content');
+
+                if(!data.valid) {
+                    contentDiv.innerHTML = `<p class="error">${data.error}</p>`;
+                    return;
+                }
+
+                let html = '<ul>';
+                data.reports.forEach(r => html += `<li>${r}</li>`);
+                html += '</ul>';
+                contentDiv.innerHTML = html;
+
+            } catch(err) {
+                document.getElementById('content').innerHTML = '<p class="error">Failed to fetch reports.</p>';
+            }
+        }
+
+        loadReports();
+    </script>
+</body>
+</html>

@@ -1,67 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Patient Reports</title>
+    <title>MediVault – Medical Reports</title>
     <link rel="stylesheet" href="reports.css">
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
 </head>
 <body>
 
-    <h1>Patient Reports</h1>
+    <div class="header">
+        <a href="index.html" class="back-btn">Back to Home</a>
+        <h1>MediVault – Medical Reports</h1>
+    </div>
 
     <div class="controls">
         <input id="searchBox" type="text" placeholder="Search reports...">
-        
         <select id="categoryFilter">
             <option value="all">All Categories</option>
             <option value="Laboratory">Laboratory</option>
             <option value="Radiology">Radiology</option>
             <option value="Cardiology">Cardiology</option>
-            <option value="Prescription">Prescription</option>
             <option value="Discharge Summary">Discharge Summary</option>
             <option value="Vaccination">Vaccination</option>
         </select>
-
-        <button class="btn" id="addReportBtn">Add Report</button> 
-        <button class="btn" id="prescriptionParserBtn">Prescription Parser</button>
-        <button class="btn qr-btn" id="profileQrBtn">Generate Profile QR</button> 
+        <button class="btn" id="addReportBtn">Add Report</button>
+        <button class="btn qr-btn" id="profileQrBtn">Full Access QR</button>
+        <button class="btn share-selected-btn" id="shareSelectedBtn">Share Selected</button>
     </div>
 
     <table id="reportTable">
         <thead>
             <tr>
+                <th><input type="checkbox" id="selectAll"></th>
                 <th>Report Name</th>
                 <th>Type</th>
                 <th>Category</th>
                 <th>Date</th>
                 <th>Doctor</th>
+                <th>File</th>
                 <th>View</th>
                 <th>Delete</th>
             </tr>
         </thead>
-        <tbody id="tableBody">
-            <tr data-report-id="12345">
-                <td>Blood Test Report</td>
-                <td>PDF</td>
-                <td>Laboratory</td>
-                <td>2025-11-22</td>
-                <td>Dr. Roy</td>
-                <td><button class="viewBtn" data-url="#">View</button></td>
-                <td><button class="deleteBtn">Delete</button></td>
-            </tr>
-            <tr data-report-id="67890">
-                <td>X-Ray Chest</td>
-                <td>Image</td>
-                <td>Radiology</td>
-                <td>2025-11-19</td>
-                <td>Dr. Patel</td>
-                <td><button class="viewBtn" data-url="#">View</button></td>
-                <td><button class="deleteBtn">Delete</button></td>
-            </tr>
-        </tbody>
+        <tbody id="tableBody"></tbody>
     </table>
 
-    <!-- View / QR Modal -->
+    <!-- Modals -->
     <div id="modal" class="modal">
         <div class="modalBox">
             <button id="closeModal">X</button>
@@ -69,24 +53,31 @@
         </div>
     </div>
 
-    <!-- Add Report Modal -->
+    <!-- Add Report Modal with File Upload -->
     <div id="addReportModal" class="modal">
         <div class="modalBox">
             <button id="closeAddReport" class="closeBtn">X</button>
-
-            <h2>Add Report</h2>
+            <h2>Add New Medical Report</h2>
             <label>Report Name</label>
-            <input type="text" id="r_name">
-            <label>Type</label>
-            <input type="text" id="r_type" placeholder="PDF or Image">
-            <label>Category</label>
-            <input type="text" id="r_category">
-            <label>Date (YYYY-MM-DD)</label>
-            <input type="text" id="r_date">
-            <label>Doctor Name</label>
-            <input type="text" id="r_doctor">
+            <input type="text" id="r_name" placeholder="e.g. Blood Test Report">
 
-            <button id="saveReportBtn" class="btn" style="margin-top:15px;">Save Report</button>
+            <label>File Type</label>
+            <select id="r_type">
+                <option value="Image">Image (JPG/PNG)</option>
+                <option value="PDF">PDF Document</option>
+            </select>
+
+            <label>Upload File <span id="fileInfo" style="color:#d32f2f;font-size:12px;"></span></label>
+            <input type="file" id="fileUpload" accept="image/*,.pdf">
+
+            <label>Category</label>
+            <input type="text" id="r_category" placeholder="e.g. Laboratory">
+            <label>Date (YYYY-MM-DD)</label>
+            <input type="text" id="r_date" value="" placeholder="2025-11-25">
+            <label>Doctor Name</label>
+            <input type="text" id="r_doctor" placeholder="Dr. Sharma">
+
+            <button id="saveReportBtn" class="btn">Save Report</button>
         </div>
     </div>
 

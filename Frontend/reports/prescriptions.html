@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MediVault – Prescriptions</title>
+    <link rel="stylesheet" href="reports.css">
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/localforage@1.10.0/dist/localforage.min.js"></script>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="back-btn">Back to Home</a>
+        <h1>MediVault – Prescriptions</h1>
+    </div>
+
+    <div class="controls">
+        <input id="searchBox" type="text" placeholder="Search prescriptions...">
+        <select id="categoryFilter">
+            <option value="all">All Specialties</option>
+            <option value="General">General Physician</option>
+            <option value="Dermatology">Dermatology</option>
+            <option value="Orthopedic">Orthopedic</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="ENT">ENT</option>
+            <option value="Ophthalmology">Ophthalmology</option>
+            <option value="Dentist">Dentist</option>
+            <option value="Cardiology">Cardiology</option>
+        </select>
+        <button class="btn" id="addReportBtn">Add Prescription</button>
+        <button class="btn qr-btn" id="profileQrBtn">Full Access QR</button>
+        <button class="btn share-selected-btn" id="shareSelectedBtn">Share Selected</button>
+    </div>
+
+    <table id="reportTable">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll"></th>
+                <th>Prescription / Medicine</th>
+                <th>Type</th>
+                <th>Specialty</th>
+                <th>Date</th>
+                <th>Doctor</th>
+                <th>File</th>
+                <th>View</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Items will be loaded from local storage -->
+        </tbody>
+    </table>
+
+    <!-- View Modal -->
+    <div id="modal" class="modal">
+        <div class="modalBox">
+            <button id="closeModal">X</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Add Prescription Modal with File Upload -->
+    <div id="addReportModal" class="modal">
+        <div class="modalBox">
+            <button id="closeAddReport" class="closeBtn">X</button>
+            <h2>Add New Prescription</h2>
+
+            <label>Prescription Name / Medicine</label>
+            <input type="text" id="r_name" placeholder="e.g. Amoxicillin 500mg, Paracetamol">
+
+            <label>File Type</label>
+            <select id="r_type">
+                <option value="Image">Image (JPG/PNG) – Photo of prescription</option>
+                <option value="PDF">PDF Document</option>
+            </select>
+
+            <label>Upload File <span id="fileInfo" style="color:#d32f2f;font-size:12px;">(Required)</span></label>
+            <input type="file" id="fileUpload" accept="image/*,.pdf" required>
+
+            <label>Specialty / Department</label>
+            <input type="text" id="r_category" placeholder="e.g. General, Dermatology">
+
+            <label>Date</label>
+            <input type="text" id="r_date" placeholder="2025-11-25">
+
+            <label>Doctor Name</label>
+            <input type="text" id="r_doctor" placeholder="Dr. Verma">
+
+            <button id="saveReportBtn" class="btn">Save Prescription</button>
+        </div>
+    </div>
+
+    <!-- Use the same JS as reports.js (or rename to prescriptions.js) -->
+    <script src="prescriptions.js"></script>
+</body>
+</html>
