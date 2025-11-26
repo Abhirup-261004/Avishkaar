@@ -1,66 +1,84 @@
 const express = require("express");
 const router = express.Router();
-const fetch = require("node-fetch"); // npm install node-fetch
+const fetch = require("node-fetch");
 
-// local dataset of eco advice
-const ecoData = {
-  travel: [
-    "🚴 Try cycling or walking for short distances — zero emissions!",
-    "🚗 Carpool or use public transport to cut your CO₂ by 70%.",
-    "✈️ Flying less frequently reduces your footprint dramatically."
+// ------------------------------
+// 🔥 MediVault Dataset Responses
+// ------------------------------
+const mediData = {
+  features: [
+    "📌 MediVault allows users to store medical reports, prescriptions, and emergency info in one secure place.",
+    "💊 You can upload prescriptions and generate QR codes for verification.",
+    "🩺 The system includes emergency mode, hospital locator, and digital health vault."
   ],
-  energy: [
-    "💡 Switch to LED bulbs — they use 75% less energy.",
-    "🔌 Unplug chargers when not in use to save electricity.",
-    "🌞 Try using natural daylight — it’s free and eco-friendly!"
+  prescription: [
+    "🧾 You can upload prescriptions, view them later after login, and even generate secure QR-based validation.",
+    "📤 Prescription upload errors usually occur due to missing fields or wrong file format. Make sure to use JPG or PNG.",
+    "🔍 The prescription parser uses OCR — ensure the image is clear for better accuracy."
   ],
-  diet: [
-    "🥗 Include more plant-based meals in your diet.",
-    "🍗 Reduce red meat consumption — it has a high CO₂ cost.",
-    "🍎 Buy local and seasonal produce to lower transport emissions."
+  reports: [
+    "📁 Reports are stored safely and linked to your user account so you can see them after logging in.",
+    "📂 If reports are not loading, ensure your model and route files return the correct data to `reports.ejs`.",
+    "📥 You can upload lab reports, X-rays, and health summaries anytime."
+  ],
+  qr: [
+    "🔐 MediVault uses encoded QR tokens that include report/prescription metadata and expiration timestamps.",
+    "📱 If QR is not generating, check if all input fields are filled and the QR API endpoint is working.",
+    "🛠 If QR scan fails, ensure the base64 token is formed correctly and not expired."
+  ],
+  account: [
+    "👤 If login is failing, ensure you switched from Passport.js to bcrypt properly.",
+    "🔑 Registration needs hashed password using bcrypt. Missing hashing causes validation errors.",
+    "💬 If dashboard data isn't loading, verify your user session middleware is functioning."
+  ],
+  emergency: [
+    "🚨 In emergency mode, MediVault can find nearby hospitals using geolocation + Google Maps API.",
+    "📍 If the hospital locator map isn't visible, ensure your API key and map container size are correct.",
+    "🆘 Emergency info can be stored and accessed via a special emergency QR."
   ],
   general: [
-    "🌱 Every small action counts — consistency matters!",
-    "♻️ Reduce, Reuse, Recycle — your daily mantra.",
-    "🚰 Save water — turn off taps while brushing your teeth."
+    "💙 Welcome to MediVault — your secure digital health vault!",
+    "📌 I can help with prescriptions, reports, accounts, QR, errors and project features.",
+    "🤖 Try asking: 'Why QR is not working?' or 'How to store reports?'"
   ]
 };
 
-// simple NLP-like keyword search
+// ---------------------
+// 🔍 Topic Finder Logic
+// ---------------------
 function findTopic(message) {
   const msg = message.toLowerCase();
-  if (msg.includes("travel") || msg.includes("car") || msg.includes("bus") || msg.includes("bike"))
-    return "travel";
-  if (msg.includes("energy") || msg.includes("electric") || msg.includes("light"))
-    return "energy";
-  if (msg.includes("food") || msg.includes("diet") || msg.includes("meat") || msg.includes("veg"))
-    return "diet";
+
+  if (msg.includes("prescription") || msg.includes("medicine") || msg.includes("upload"))
+    return "prescription";
+
+  if (msg.includes("report") || msg.includes("lab") || msg.includes("records"))
+    return "reports";
+
+  if (msg.includes("qr") || msg.includes("scan") || msg.includes("code"))
+    return "qr";
+
+  if (msg.includes("login") || msg.includes("register") || msg.includes("account") || msg.includes("password"))
+    return "account";
+
+  if (msg.includes("emergency") || msg.includes("hospital") || msg.includes("nearby"))
+    return "emergency";
+
+  if (msg.includes("feature") || msg.includes("what is") || msg.includes("about"))
+    return "features";
+
   return "general";
 }
 
-// optional: fetch a random sustainability fact from an open API
-async function getExternalFact() {
-  try {
-    const res = await fetch("https://api.api-ninjas.com/v1/facts?limit=1", {
-      headers: { 'X-Api-Key': 'YOUR_FREE_API_NINJAS_KEY' } // optional
-    });
-    const data = await res.json();
-    if (Array.isArray(data) && data[0]?.fact) return data[0].fact;
-  } catch (err) {
-    return null;
-  }
-  return null;
-}
-
+// ---------------------
+// 💬 Chat Route
+// ---------------------
 router.post("/chat", async (req, res) => {
   const { message } = req.body;
+  
   const topic = findTopic(message);
-  const tips = ecoData[topic];
-  const randomTip = tips[Math.floor(Math.random() * tips.length)];
-
-  // optional: include live environmental fact
-  const fact = await getExternalFact();
-  const reply = fact ? `${randomTip}\n\n💬 Fun Fact: ${fact}` : randomTip;
+  const responses = mediData[topic];
+  const reply = responses[Math.floor(Math.random() * responses.length)];
 
   res.json({ reply });
 });

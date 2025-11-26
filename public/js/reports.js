@@ -1,25 +1,35 @@
 // ==========================
-// REPORTS — Now using backend & MongoDB
+// REPORTS — Frontend Script (Synced with reports.ejs)
 // ==========================
 
+// Load data on page ready
 document.addEventListener("DOMContentLoaded", loadReportsFromDB);
 
+// ELEMENTS
 const searchBox = document.getElementById("searchBox");
 const categoryFilter = document.getElementById("categoryFilter");
 const tableBody = document.getElementById("tableBody");
+const selectAll = document.getElementById("selectAll");
 
-// Load reports from backend
+// -------------------------------
+// LOAD ALL REPORTS FROM BACKEND
+// -------------------------------
 async function loadReportsFromDB() {
-    const res = await fetch("/reports/data");
-    const reports = await res.json();
+    try {
+        const res = await fetch("/reports/data");
+        const reports = await res.json();
 
-    tableBody.innerHTML = "";
-    reports.forEach(addRowToTable);
+        tableBody.innerHTML = "";
+        reports.forEach(addRowToTable);
+    } catch (err) {
+        console.error("Failed to load reports", err);
+    }
 }
 
-// Add new report (submit to backend)
+// -------------------------------
+// ADD NEW REPORT (SAVE)
+// -------------------------------
 document.getElementById("saveReportBtn").addEventListener("click", async () => {
-
     const formData = new FormData();
     formData.append("name", document.getElementById("r_name").value);
     formData.append("type", document.getElementById("r_type").value);
@@ -34,15 +44,17 @@ document.getElementById("saveReportBtn").addEventListener("click", async () => {
     });
 
     if (res.ok) {
-        alert("Report saved!");
-        document.getElementById("addReportModal").style.display = "none";
+        alert("Report saved successfully!");
+        closeAddReportModal();
         loadReportsFromDB();
     } else {
-        alert("Error saving report");
+        alert("Error: Could not save report");
     }
 });
 
-// Add row to HTML table
+// -------------------------------
+// ADD ROW TO TABLE
+// -------------------------------
 function addRowToTable(report) {
     const row = document.createElement("tr");
     row.dataset.id = report._id;
@@ -62,34 +74,57 @@ function addRowToTable(report) {
     tableBody.appendChild(row);
 }
 
-// Handle View/Delete buttons
+// -------------------------------
+// VIEW + DELETE HANDLERS
+// -------------------------------
 tableBody.addEventListener("click", async (e) => {
-
     const row = e.target.closest("tr");
     const id = row.dataset.id;
 
-    // VIEW FILE
+    // VIEW REPORT (Correct path)
     if (e.target.classList.contains("viewBtn")) {
-        const iframeUrl = `/uploads/${id}`;
+        const iframeUrl = `/uploads/reports/${id}`;
         document.getElementById("modalContent").innerHTML =
-            `<iframe src="${iframeUrl}" width="100%" height="520px"></iframe>`;
-        document.getElementById("modal").style.display = "flex";
+            `<iframe src="${iframeUrl}" width="100%" height="520px" style="border:none;"></iframe>`;
+        openViewModal();
     }
 
-    // DELETE FILE
+    // DELETE REPORT
     if (e.target.classList.contains("deleteBtn")) {
-        if (confirm("Delete this report?")) {
+        if (confirm("Are you sure you want to delete this report?")) {
             await fetch(`/reports/delete/${id}`, { method: "DELETE" });
             row.remove();
         }
     }
 });
 
+// -------------------------------
+// VIEW MODAL CONTROLS
+// -------------------------------
 document.getElementById("closeModal").addEventListener("click", () => {
     document.getElementById("modal").style.display = "none";
 });
 
-// Search filter
+function openViewModal() {
+    document.getElementById("modal").style.display = "flex";
+}
+
+// -------------------------------
+// ADD REPORT MODAL CONTROLS
+// -------------------------------
+document.getElementById("addReportBtn").addEventListener("click", () => {
+    document.getElementById("addReportModal").style.display = "flex";
+});
+
+document.getElementById("closeAddReport").addEventListener("click", closeAddReportModal);
+
+function closeAddReportModal() {
+    document.getElementById("addReportModal").style.display = "none";
+}
+
+// -------------------------------
+// SEARCH & FILTER
+// -------------------------------
 searchBox.addEventListener("input", filterTable);
 categoryFilter.addEventListener("change", filterTable);
 
@@ -107,3 +142,55 @@ function filterTable() {
         row.style.display = matchSearch && matchCat ? "" : "none";
     });
 }
+
+// -------------------------------
+// SELECT ALL CHECKBOX LOGIC
+// -------------------------------
+selectAll.addEventListener("change", () => {
+    const status = selectAll.checked;
+    document.querySelectorAll(".row-checkbox").forEach(cb => cb.checked = status);
+});
+
+// -------------------------------
+// QR GENERATION (WORKING VERSION)
+// -------------------------------
+document.getElementById("profileQrBtn").addEventListener("click", () => {
+    const qrModal = document.getElementById("qrModal");
+    const container = document.getElementById("qrContainer");
+
+    // Clear previous QR
+    container.innerHTML = "";
+
+    // Full access URL
+    const qrData = `${window.location.origin}/records`;
+
+    // Generate QR
+    new QRCode(container, {
+        text: qrData,
+        width: 220,
+        height: 220,
+        colorDark: "#000",
+        colorLight: "#fff"
+    });
+
+    qrModal.style.display = "flex";
+});
+
+// Close QR modal
+document.getElementById("closeQR").addEventListener("click", () => {
+    document.getElementById("qrModal").style.display = "none";
+});
+
+// -------------------------------
+// SHARE SELECTED BUTTON
+// -------------------------------
+document.getElementById("shareSelectedBtn").addEventListener("click", () => {
+    const selected = [...document.querySelectorAll(".row-checkbox")].filter(cb => cb.checked);
+
+    if (selected.length === 0) {
+        alert("Select at least one report to share.");
+        return;
+    }
+
+    alert(`Sharing ${selected.length} report(s)... Feature coming soon!`);
+});

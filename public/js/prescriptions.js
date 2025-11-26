@@ -1,23 +1,34 @@
 // ==========================
-// PRESCRIPTIONS — Backend + MongoDB
+// PRESCRIPTIONS — Frontend JS
 // ==========================
 
+// Load on page start
 document.addEventListener("DOMContentLoaded", loadPrescriptionsFromDB);
 
+// ELEMENTS
 const searchBox = document.getElementById("searchBox");
 const categoryFilter = document.getElementById("categoryFilter");
 const tableBody = document.getElementById("tableBody");
+const selectAll = document.getElementById("selectAll");
 
-// Load prescriptions from backend
+// -------------------------------
+// LOAD FROM BACKEND
+// -------------------------------
 async function loadPrescriptionsFromDB() {
-    const res = await fetch("/prescriptions/data");
-    const items = await res.json();
+    try {
+        const res = await fetch("/prescriptions/data");
+        const items = await res.json();
 
-    tableBody.innerHTML = "";
-    items.forEach(addRowToTable);
+        tableBody.innerHTML = "";
+        items.forEach(addRowToTable);
+    } catch (err) {
+        console.error("Error loading prescriptions:", err);
+    }
 }
 
-// Save prescription to backend
+// -------------------------------
+// ADD NEW — SAVE
+// -------------------------------
 document.getElementById("saveReportBtn").addEventListener("click", async () => {
 
     const formData = new FormData();
@@ -35,14 +46,16 @@ document.getElementById("saveReportBtn").addEventListener("click", async () => {
 
     if (res.ok) {
         alert("Prescription saved!");
-        document.getElementById("addReportModal").style.display = "none";
+        closeAddReportModal();
         loadPrescriptionsFromDB();
     } else {
         alert("Error saving prescription");
     }
 });
 
-// Add row to UI
+// -------------------------------
+// ADD ROW TO TABLE
+// -------------------------------
 function addRowToTable(item) {
     const row = document.createElement("tr");
     row.dataset.id = item._id;
@@ -62,18 +75,19 @@ function addRowToTable(item) {
     tableBody.appendChild(row);
 }
 
-// View/Delete
+// -------------------------------
+// TABLE BUTTON ACTIONS
+// -------------------------------
 tableBody.addEventListener("click", async (e) => {
-
     const row = e.target.closest("tr");
     const id = row.dataset.id;
 
-    // VIEW FILE
+    // VIEW
     if (e.target.classList.contains("viewBtn")) {
         const iframeUrl = `/uploads/prescriptions/${id}`;
         document.getElementById("modalContent").innerHTML =
-            `<iframe src="${iframeUrl}" width="100%" height="520px"></iframe>`;
-        document.getElementById("modal").style.display = "flex";
+            `<iframe src="${iframeUrl}" width="100%" height="520px" style="border:none;"></iframe>`;
+        openViewModal();
     }
 
     // DELETE
@@ -85,11 +99,9 @@ tableBody.addEventListener("click", async (e) => {
     }
 });
 
-document.getElementById("closeModal").addEventListener("click", () =>
-    document.getElementById("modal").style.display = "none"
-);
-
-// Filters
+// -------------------------------
+// SEARCH + FILTER
+// -------------------------------
 searchBox.addEventListener("input", filterTable);
 categoryFilter.addEventListener("change", filterTable);
 
@@ -107,3 +119,79 @@ function filterTable() {
         row.style.display = matchSearch && matchCat ? "" : "none";
     });
 }
+
+// -------------------------------
+// SELECT ALL
+// -------------------------------
+selectAll.addEventListener("change", () => {
+    const check = selectAll.checked;
+    document.querySelectorAll(".row-checkbox").forEach(cb => cb.checked = check);
+});
+
+// -------------------------------
+// ADD REPORT MODAL — OPEN/CLOSE
+// -------------------------------
+document.getElementById("addReportBtn").addEventListener("click", () => {
+    document.getElementById("addReportModal").style.display = "flex";
+});
+
+document.getElementById("closeAddReport").addEventListener("click", closeAddReportModal);
+
+function closeAddReportModal() {
+    document.getElementById("addReportModal").style.display = "none";
+}
+
+// -------------------------------
+// VIEW MODAL — OPEN/CLOSE
+// -------------------------------
+document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("modal").style.display = "none";
+});
+
+function openViewModal() {
+    document.getElementById("modal").style.display = "flex";
+}
+
+// -------------------------------
+// QR GENERATION (WORKING VERSION)
+// -------------------------------
+document.getElementById("profileQrBtn").addEventListener("click", () => {
+    const qrModal = document.getElementById("qrModal");
+    const container = document.getElementById("qrContainer");
+
+    // Clear previous QR
+    container.innerHTML = "";
+
+    // Full access URL
+    const qrData = `${window.location.origin}/records`;
+
+    // Generate QR
+    new QRCode(container, {
+        text: qrData,
+        width: 220,
+        height: 220,
+        colorDark: "#000",
+        colorLight: "#fff"
+    });
+
+    qrModal.style.display = "flex";
+});
+
+// Close QR modal
+document.getElementById("closeQR").addEventListener("click", () => {
+    document.getElementById("qrModal").style.display = "none";
+});
+// -------------------------------
+// SHARE SELECTED (PLACEHOLDER)
+// -------------------------------
+document.getElementById("shareSelectedBtn").addEventListener("click", () => {
+    const selected = [...document.querySelectorAll(".row-checkbox")]
+        .filter(cb => cb.checked);
+
+    if (selected.length === 0) {
+        alert("Select at least one prescription to share.");
+        return;
+    }
+
+    alert(`Sharing ${selected.length} prescription(s)... (coming soon!)`);
+});

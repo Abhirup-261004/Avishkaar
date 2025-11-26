@@ -58,6 +58,8 @@ app.set("views", path.join(__dirname, "views"));
 app.use(ejslayouts);
 app.set("layout", "layouts/boilerplate.ejs");
 
+app.use("/uploads",express.static("uploads"));
+
 /* ------------------------------
    🔹 MIDDLEWARES
 ------------------------------ */

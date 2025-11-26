@@ -4,7 +4,7 @@
 <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
 <div class="header">
-    <a href="/" class="back-btn">Back to Home</a>
+    <a href="/records" class="back-btn">Back to Vault</a>
     <h1>MediVault – Medical Reports</h1>
 </div>
 
@@ -88,6 +88,14 @@
         <button id="saveReportBtn" class="btn">Save Report</button>
 
     </div>
+</div>
+
+<div id="qrModal" class="modal" style="display:none;">
+  <div class="modalBox">
+    <button id="closeQR" class="closeBtn">X</button>
+    <h3>Your Full Access QR</h3>
+    <div id="qrContainer"></div>
+  </div>
 </div>
 
 <!-- JS -->
